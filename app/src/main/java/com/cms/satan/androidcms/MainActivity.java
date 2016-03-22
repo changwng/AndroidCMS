@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         bn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                System.out.println(new Date() + "屏幕触摸按钮");
                 show.setText("触发了一次按钮的Onclick事件 ," + new Date());
             }
         });
