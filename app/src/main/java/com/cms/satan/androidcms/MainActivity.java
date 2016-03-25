@@ -1,48 +1,121 @@
 package com.cms.satan.androidcms;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cms.satan.androidcms.model.User;
+import com.litesuits.http.HttpConfig;
+import com.litesuits.http.LiteHttp;
+import com.litesuits.http.annotation.HttpUri;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.request.StringRequest;
+import com.litesuits.http.request.param.HttpRichParamModel;
+import com.litesuits.http.response.Response;
+import com.litesuits.http.utils.HttpUtil;
+
 import java.util.Date;
+;
 
 public class MainActivity extends AppCompatActivity {
-
+    public Handler mHandler=new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            switch(msg.what)
+            {
+                case 1:
+                    Intent intent = new Intent(MainActivity.this,startActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //创建一个线性布局管理器
-        LinearLayout layout = new LinearLayout(this);
-        //设置该Activity显示layou
-        super.setContentView(layout);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        //创建一个TextView
-        final TextView show = new TextView(this);
-        //创建一个按钮
-        Button bn = new Button(this);
-        bn.setText(R.string.ok);
-        bn.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        //向layout容器中添加textview
-        layout.addView(show);
-        //向layout容器中添加按钮
-        layout.addView(bn);
-        //为按钮绑定一个事件监听器
-        bn.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.welcome_page);
+        Thread thread=new Thread(new Runnable()
+        {
             @Override
-            public void onClick(View v) {
-//                System.out.println(new Date() + "屏幕触摸按钮");
-                show.setText("触发了一次按钮的Onclick事件 ," + new Date());
+            public void run()
+            {
+                try {
+                    Thread.sleep(3000);
+                    //检查版本更新
+                    HttpConfig config = new HttpConfig(MainActivity.this) // configuration quickly
+                            .setDebugged(true)                   // log output when debugged
+                            .setDetectNetwork(true)              // detect network before connect
+                            .setDoStatistics(true)               // statistics of time and traffic
+                            .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
+                            .setTimeOut(10000, 10000);             // connect and socket timeout: 10s
+                    LiteHttp liteHttp = LiteHttp.newApacheHttpClient(config);
+                    final String url="http://127.0.0.1/update.json";
+                    //String html = liteHttp.perform(new StringRequest(url));
+                    @HttpUri(url)
+                   class LoginParam extends HttpRichParamModel<User> {
+//                        private String name;
+//                        private String password;
+//                        public LoginParam(String name, String password) {
+//                            this.name = name;
+//                            this.password = password;
+//                        }
+                    }
+                    liteHttp.executeAsync(new LoginParam().setHttpListener(
+                            new HttpListener<User>() {
+                                @Override
+                                public void onSuccess(User user, Response<User> response) {
+                                    HttpUtil.showTips(MainActivity.this, "对象自动转化", user.toString());
+                                    PackageManager manager = getApplicationContext().getPackageManager();
+                                    String pName = "cn.nedu.math.ninebox";
+                                    String versionName = "";
+                                    int versionCode = 0;
+                                    try {
+                                        PackageManager pm = getApplicationContext().getPackageManager();
+
+                                        PackageInfo pinfo = pm.getPackageInfo(pName, PackageManager.GET_CONFIGURATIONS);
+                                        versionName = pinfo.versionName;
+                                        versionCode = pinfo.versionCode;
+                                    }
+                                    catch (PackageManager.NameNotFoundException e) {
+                                        Log.d("MainActivityError",e.getMessage());
+                                    }
+                                    if (user.Version == versionName) {
+                                        //已是最新的版本
+                                        //启动首页
+                                        Message msg = new Message();
+                                        msg.what = 1;
+                                        mHandler.sendMessage(msg);
+                                    }
+                                    else
+                                    {
+                                        //下载最新的版本
+                                        
+                                    }
+                                }
+                            }
+                    ));
+
+                } catch (InterruptedException e) {
+                    Log.d("MainActivityError",e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
-
-
-
+        thread.start();
     }
 }
