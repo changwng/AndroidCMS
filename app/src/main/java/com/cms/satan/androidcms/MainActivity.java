@@ -18,7 +18,9 @@ import com.cms.satan.androidcms.model.User;
 import com.litesuits.http.HttpConfig;
 import com.litesuits.http.LiteHttp;
 import com.litesuits.http.annotation.HttpUri;
+import com.litesuits.http.exception.HttpException;
 import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.request.AbstractRequest;
 import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.request.param.HttpRichParamModel;
 import com.litesuits.http.response.Response;
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                             .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
                             .setTimeOut(10000, 10000);             // connect and socket timeout: 10s
                     LiteHttp liteHttp = LiteHttp.newApacheHttpClient(config);
-                    final String url="http://127.0.0.1/update.json";
+                    final String url="http://192.168.6.143/update.json";
                     //String html = liteHttp.perform(new StringRequest(url));
                     @HttpUri(url)
                    class LoginParam extends HttpRichParamModel<User> {
@@ -79,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                             new HttpListener<User>() {
                                 @Override
                                 public void onSuccess(User user, Response<User> response) {
-                                    HttpUtil.showTips(MainActivity.this, "对象自动转化", user.toString());
+                                    //HttpUtil.showTips(MainActivity.this, "对象自动转化", user.Version.toString());
                                     PackageManager manager = getApplicationContext().getPackageManager();
-                                    String pName = "cn.nedu.math.ninebox";
+                                    String pName = "com.cms.satan.androidcms";
                                     String versionName = "";
                                     int versionCode = 0;
                                     try {
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                     catch (PackageManager.NameNotFoundException e) {
                                         Log.d("MainActivityError",e.getMessage());
                                     }
-                                    if (user.Version == versionName) {
+                                    if (user.Version .equals(versionName) ) {
                                         //已是最新的版本
                                         //启动首页
                                         Message msg = new Message();
@@ -104,8 +106,25 @@ public class MainActivity extends AppCompatActivity {
                                     else
                                     {
                                         //下载最新的版本
-                                        
+                                        HttpUtil.showTips(MainActivity.this, "下载最新的版本", user.Version.toString());
                                     }
+                                }
+
+                                @Override
+                                public void onLoading(AbstractRequest<User> request, long total, long len) {
+                                    super.onLoading(request, total, len);
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, Response<User> response) {
+                                    super.onFailure(e, response);
+                                    Log.d("MainActivityError", e.getMessage());
+                                    HttpUtil.showTips(MainActivity.this, "启动失败",  e.getMessage());
+                                }
+
+                                @Override
+                                public void onEnd(Response<User> response) {
+                                    super.onEnd(response);
                                 }
                             }
                     ));
