@@ -27,7 +27,7 @@ import com.litesuits.http.response.Response;
 import com.litesuits.http.utils.HttpUtil;
 
 import java.util.Date;
-;
+
 
 public class MainActivity extends AppCompatActivity {
     public Handler mHandler=new Handler()
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
+    //软件版本信息文件路径
+    protected final String url="http://192.168.6.143/update.json";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
                             .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
                             .setTimeOut(10000, 10000);             // connect and socket timeout: 10s
                     LiteHttp liteHttp = LiteHttp.newApacheHttpClient(config);
-                    final String url="http://192.168.6.143/update.json";
-                    //String html = liteHttp.perform(new StringRequest(url));
                     @HttpUri(url)
                    class LoginParam extends HttpRichParamModel<User> {
 //                        private String name;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                     else
                                     {
                                         //下载最新的版本
-                                        HttpUtil.showTips(MainActivity.this, "下载最新的版本", user.Version.toString());
+                                        HttpUtil.showTips(MainActivity.this, "下载最新的版本", user.Version);
                                     }
                                 }
 
