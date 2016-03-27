@@ -1,8 +1,10 @@
 package com.cms.satan.androidcms;
 
+import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     //软件版本信息文件路径
-    protected final String url="http://192.168.6.143/update.json";
+    protected final String url="http://192.168.6.133/update.json";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
                                     PackageManager manager = getApplicationContext().getPackageManager();
                                     String pName = "com.cms.satan.androidcms";
                                     String versionName = "";
-                                    int versionCode = 0;
+                                    //int versionCode = 0;
                                     try {
                                         PackageManager pm = getApplicationContext().getPackageManager();
 
                                         PackageInfo pinfo = pm.getPackageInfo(pName, PackageManager.GET_CONFIGURATIONS);
                                         versionName = pinfo.versionName;
-                                        versionCode = pinfo.versionCode;
+                                        //versionCode = pinfo.versionCode;
                                     }
                                     catch (PackageManager.NameNotFoundException e) {
                                         Log.d("MainActivityError",e.getMessage());
