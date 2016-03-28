@@ -14,4 +14,5 @@
     <color name="colorIconsBlur2">#949494</color>
     <color name="colorIconsFocus2">#48B1F1</color>
     <color name="colorSplit">#EDEEEE</color>
+    <color name="colorUserBg">#98C4F5</color>
 </resources>

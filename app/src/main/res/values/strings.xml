@@ -4,8 +4,8 @@
     <string name="title_activity_start">startActivity</string>
     <string name="version">1.0</string>
     <string name="mainpage">首页</string>
-    <string name="icons_home">&#xe900;</string>
-    <string name="icons_pacman">&#xe901;</string>
-    <string name="icons_user">&#xe902;</string>
-    <string name="icons_airplane">&#xe903;</string>
+    <string name="icons_home">&#xe901;</string>
+    <string name="icons_pacman">&#xe903;</string>
+    <string name="icons_user">&#xe900;</string>
+    <string name="icons_airplane">&#xe902;</string>
 </resources>

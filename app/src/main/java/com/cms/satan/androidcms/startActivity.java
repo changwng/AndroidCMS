@@ -7,9 +7,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,17 +22,27 @@ import java.util.Date;
 
 public class startActivity extends AppCompatActivity {
 
+    private FrameLayout fl_main;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setContentView(R.layout.activity_main);
         //初始化字体
         initFont();
+        fl_main=(FrameLayout)findViewById(R.id.fl_main);
 
     }
     public void home_click(View view)
     {
         setNavColor(1);
+        View v=getLayoutInflater().inflate(R.layout.home_layout, null);
+        // View v= View.inflate(getApplicationContext(),R.layout.user_layout,null);
+        fl_main.removeAllViews();
+        fl_main.addView(v, FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
     }
     public void pacman_click(View view)
     {
@@ -38,6 +51,11 @@ public class startActivity extends AppCompatActivity {
     public void user_click(View view)
     {
         setNavColor(3);
+        View v=getLayoutInflater().inflate(R.layout.user_layout, null);
+       // View v= View.inflate(getApplicationContext(),R.layout.user_layout,null);
+        fl_main.removeAllViews();
+        fl_main.addView(v, FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+
     }
     public void initFont()
     {

@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_page);
+        Intent intent = new Intent(MainActivity.this,startActivity.class);
+        startActivity(intent);
+        finish();
         Thread thread=new Thread(new Runnable()
         {
             @Override
@@ -137,6 +140,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        thread.start();
+        //thread.start();
     }
 }

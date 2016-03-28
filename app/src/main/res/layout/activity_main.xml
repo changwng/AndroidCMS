@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
+
     >
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
+        android:layout_height="match_parent"
+        android:id="@+id/fl_main">
+        <include android:id="@+id/home_layout" layout="@layout/home_layout" />
     </FrameLayout>
     <View
         android:layout_width="fill_parent"
