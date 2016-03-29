@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cms.satan.androidcms.common.LiteHttpConfigs;
 import com.cms.satan.androidcms.model.User;
 import com.litesuits.http.HttpConfig;
 import com.litesuits.http.LiteHttp;
@@ -65,14 +66,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 try {
                     Thread.sleep(3000);
-                    //检查版本更新
-                    HttpConfig config = new HttpConfig(MainActivity.this) // configuration quickly
-                            .setDebugged(true)                   // log output when debugged
-                            .setDetectNetwork(true)              // detect network before connect
-                            .setDoStatistics(true)               // statistics of time and traffic
-                            .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
-                            .setTimeOut(10000, 10000);             // connect and socket timeout: 10s
-                    LiteHttp liteHttp = LiteHttp.newApacheHttpClient(config);
+                    LiteHttpConfigs _config=new LiteHttpConfigs(MainActivity.this);
+                    LiteHttp liteHttp = LiteHttp.newApacheHttpClient(_config.config);
                     @HttpUri(url)
                    class LoginParam extends HttpRichParamModel<User> {
 //                        private String name;
