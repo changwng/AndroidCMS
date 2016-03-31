@@ -7,5 +7,9 @@
     <string name="icons_home">&#xe901;</string>
     <string name="icons_pacman">&#xe903;</string>
     <string name="icons_user">&#xe900;</string>
-    <string name="icons_airplane">&#xe902;</string>
+    <string name="icon_user2">&#xe902;</string>
+    <string name="icon_twitter">&#xe903;</string>
+    <string name="icon_cycle">&#xe901;</string>
+    <string name="drawer_open">打开</string>
+    <string name="drawer_close">关闭</string>
 </resources>
