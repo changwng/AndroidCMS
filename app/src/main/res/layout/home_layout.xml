@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="首页"
+        android:text=""
         android:textColor="@color/colorBuleSmallx"
         android:paddingTop="15dip"
         android:paddingLeft="5dip"

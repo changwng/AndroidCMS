@@ -29,12 +29,14 @@ import android.widget.Toast;
 
 import com.cms.satan.androidcms.common.MyAdapter;
 import com.cms.satan.androidcms.common.LiteHttpConfigs;
+import com.cms.satan.androidcms.common.MyNewsAdapter;
 import com.cms.satan.androidcms.model.News;
 import com.cms.satan.androidcms.model.User;
 import com.litesuits.http.utils.HttpUtil;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 
 import java.util.ArrayList;
 
@@ -49,6 +51,7 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private ListView mNewsList;
     private ArrayList<String> arrText;
     private ArrayList<Integer> arrIcons;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -79,6 +82,7 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
         mTitle = (String) getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mNewsList= (ListView) findViewById(R.id.lv_news);
         ll_leftContainer= (LinearLayout) findViewById(R.id.ll_leftContainer);
 
         //设置抽屉效果
@@ -119,6 +123,8 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
                 if (statusCode == 200){
                 try {
                 JSONArray array= response.getJSONArray("detail");
+                    ArrayList<String> titles=new ArrayList<String>();
+                    ArrayList<String> sources=new ArrayList<String>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj=array.getJSONObject(i);
                         Log.d("startActivity", "标题:" + obj.get("title")
@@ -132,11 +138,18 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
                                         + "--------收藏次数：" + obj.get("repin_count")
                                         + "--------新闻id：" + obj.get("group_id")
                         );
-                    Toast.makeText(startActivity.this,response.toString(),Toast.LENGTH_LONG).show();
+                    titles.add(obj.get("title").toString());
+                    sources.add(obj.get("source").toString());
+                   // Toast.makeText(startActivity.this,response.toString(),Toast.LENGTH_LONG).show();
+
                 }
-                } catch (JSONException e) {
+                    MyNewsAdapter adapter=new MyNewsAdapter(startActivity.this,null,titles,sources);
+                    mNewsList.setAdapter(adapter);
+                }
+                catch (JSONException e)
+                {
                         e.printStackTrace();
-                    }
+                }
             }
          }
         });

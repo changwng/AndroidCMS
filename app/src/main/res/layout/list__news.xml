@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="80sp"
+    android:background="@color/colorWhite">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="求职者"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="5sp"
+        android:layout_marginLeft="15sp"
+        android:id="@+id/tv_title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="来源:腾讯新闻"
+        android:textColor="@color/colorBlack"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5sp"
+        android:layout_marginLeft="15sp"
+        android:id="@+id/tv_source"
+        />
+    <ImageView
+        android:layout_width="140sp"
+        android:layout_height="140sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/login"
+        android:layout_marginBottom="5sp"
+        android:id="@+id/iv_newsjpg"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorSplit"
+        android:layout_above="@+id/tb_bottom"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>
