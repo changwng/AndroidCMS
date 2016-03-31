@@ -2,14 +2,19 @@ package com.cms.satan.androidcms;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Message;
+import android.preference.PreferenceActivity;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +25,24 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cms.satan.androidcms.common.MyAdapter;
+import com.cms.satan.androidcms.common.LiteHttpConfigs;
+import com.cms.satan.androidcms.model.News;
+import com.cms.satan.androidcms.model.User;
 import com.litesuits.http.utils.HttpUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.Date;
 
 public class startActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
@@ -39,6 +56,13 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
     private LinearLayout ll_leftContainer;
     private SystemBarTintManager tintManager;
     private FrameLayout fl_main;
+    private TextView home;
+    private TextView pacman ;
+    private TextView user ;
+    private TextView home2;
+    private TextView pacman2;
+    private TextView user2;
+    protected  String url_news="http://api.1-blog.com/biz/bizserver/news/list.do";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +85,61 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
         initDrawer();
         //初始化字体
         initFont();
+        //新闻
+        GetHttpNews();
         fl_main=(FrameLayout)findViewById(R.id.fl_main);
+        home = (TextView)findViewById(R.id.tv_home);
+        pacman = (TextView)findViewById(R.id.tv_pacman);
+        user = (TextView)findViewById(R.id.tv_user);
+        home2 = (TextView)findViewById(R.id.tv_home2);
+        pacman2 = (TextView)findViewById(R.id.tv_pacman2);
+        user2 = (TextView)findViewById(R.id.tv_user2);
+    }
 
+    private void GetHttpNews() {
+        Log.d("startActivity","start_get");
+        // 创建客户端对象
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url_news, new JsonHttpResponseHandler() {
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONArray errorResponse) {
+                super.onFailure(e, errorResponse);
+                Log.d("startActivity", "errorResponse====="+errorResponse.toString());
+            }
+
+            @Override
+            public void onSuccess(int statusCode, JSONObject response) {
+                super.onSuccess(statusCode, response);
+                Log.d("startActivity", "statusCode=====" + statusCode);
+                if (statusCode == 200){
+                try {
+                JSONArray array= response.getJSONArray("detail");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj=array.getJSONObject(i);
+                        Log.d("startActivity", "标题:" + obj.get("title")
+                                        + "--------来源：" + obj.get("source")
+                                        + "--------url地址：" + obj.get("article_url")
+                                        + "--------发布时间：" + obj.get("publish_time")
+                                        + "--------收录时间：" + obj.get("behot_time")
+                                        + "--------创建时间：" + obj.get("create_time")
+                                        + "--------赞的次数：" + obj.get("digg_count")
+                                        + "--------踩的次数：" + obj.get("bury_count")
+                                        + "--------收藏次数：" + obj.get("repin_count")
+                                        + "--------新闻id：" + obj.get("group_id")
+                        );
+                    Toast.makeText(startActivity.this,response.toString(),Toast.LENGTH_LONG).show();
+                }
+                } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+            }
+         }
+        });
     }
     public void initDrawer()
     {
@@ -112,6 +189,7 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
+
     public void home_click(View view)
     {
         setNavColor(1);
@@ -146,12 +224,6 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
     }
     public void setNavColor(int i)
     {
-        TextView home = (TextView)findViewById(R.id.tv_home);
-        TextView pacman = (TextView)findViewById(R.id.tv_pacman);
-        TextView user = (TextView)findViewById(R.id.tv_user);
-        TextView home2 = (TextView)findViewById(R.id.tv_home2);
-        TextView pacman2 = (TextView)findViewById(R.id.tv_pacman2);
-        TextView user2 = (TextView)findViewById(R.id.tv_user2);
         try
         {
             switch (i)
@@ -184,7 +256,7 @@ public class startActivity extends AppCompatActivity implements AdapterView.OnIt
         }
         catch (Exception ex)
         {
-            HttpUtil.showTips(this.getApplicationContext(),"提示","颜色不可用");
+            HttpUtil.showTips(this.getApplicationContext(), "提示", "颜色不可用");
         }
 
     }
