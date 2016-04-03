@@ -16,7 +16,7 @@
         android:fitsSystemWindows="true"
         android:clipToPadding="true"
         />
-        <com.cms.satan.androidcms.common.RoundImageView
+        <com.cms.satan.androidcms.widget.RoundImageView
             android:layout_width="100dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
@@ -24,7 +24,7 @@
             app:border_width="2dp"
             app:border_color="@color/colorWhite">
 
-        </com.cms.satan.androidcms.common.RoundImageView>
+        </com.cms.satan.androidcms.widget.RoundImageView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

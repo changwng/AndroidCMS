@@ -15,7 +15,7 @@
         android:name="com.cms.satan.androidcms.common.GlobalApplication"
         >
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".ui.MainActivity"
             android:theme="@style/FullScreenTheme"
             >
             <intent-filter>
@@ -23,8 +23,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".startActivity"
+        <activity android:name=".ui.startActivity"
             >
+        </activity>
+        <activity android:name=".ui.FragmentPreferences"
+
+            >
+        </activity>
+        <activity android:name=".ui.AbortUs"
+
+            >
+        </activity>
+        <activity android:name=".ui.NewInfoActivity">
+
         </activity>
     </application>
 

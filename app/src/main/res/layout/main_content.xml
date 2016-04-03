@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+    >
+<include layout="@layout/common_toolbar"/>
+<com.astuetz.PagerSlidingTabStrip
+    android:id="@+id/tabs"
+    android:layout_width="match_parent"
+    android:layout_height="48dip"
+    android:background="@drawable/background_tabs"
+    />
+
+<android.support.v4.view.ViewPager
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="0sp"
+    android:layout_weight="1"
+    />
+<View
+    android:layout_width="fill_parent"
+    android:layout_height="1dip"
+    android:background="@color/colorSplit"
+    android:layout_above="@+id/tb_bottom"
+    android:layout_marginBottom="10dip"
+    />
+<TableLayout
+    android:id="@+id/tb_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:stretchColumns="0,1,2"
+    >
+    <TableRow
+        android:layout_height="fill_parent">
+        <TableRow
+            android:layout_height="40dip"
+            android:onClick="home_click">
+            <RelativeLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icons_home"
+                    android:textColor="@color/colorIconsFocus"
+                    android:id="@+id/tv_home"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20dip"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorIconsFocus2"
+                    android:textSize="11dip"
+                    android:text="首页"
+                    android:layout_below="@id/tv_home"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_home2"/>
+            </RelativeLayout>
+
+        </TableRow>
+        <TableRow android:layout_height="40dip"
+            android:onClick="pacman_click">
+            <RelativeLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icons_pacman"
+                    android:textColor="@color/colorIconsBlur"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_pacman"
+                    android:textSize="20dip"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorIconsBlur2"
+                    android:textSize="11dip"
+                    android:text="发现"
+                    android:layout_below="@id/tv_pacman"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_pacman2"/>
+            </RelativeLayout>
+        </TableRow>
+        <TableRow android:layout_height="40dip"
+            android:onClick="user_click">
+            <RelativeLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icons_user"
+                    android:textColor="@color/colorIconsBlur"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_user"
+                    android:textSize="20dip"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorIconsBlur2"
+                    android:textSize="11dip"
+                    android:text="我"
+                    android:layout_below="@id/tv_user"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_user2"/>
+            </RelativeLayout>
+        </TableRow>
+    </TableRow>
+</TableLayout>
+</LinearLayout>

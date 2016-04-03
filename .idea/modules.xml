@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidCMS.iml" filepath="$PROJECT_DIR$/AndroidCMS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryMenu/libraryMenu.iml" filepath="$PROJECT_DIR$/libraryMenu/libraryMenu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/librarySlide/librarySlide.iml" filepath="$PROJECT_DIR$/librarySlide/librarySlide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraryTint/libraryTint.iml" filepath="$PROJECT_DIR$/libraryTint/libraryTint.iml" />
     </modules>
   </component>
 </project>

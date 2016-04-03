@@ -1,7 +1,6 @@
 package com.cms.satan.androidcms.common;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class MyNewsAdapter extends BaseAdapter
         if (convertView==null)
         {
             zujian=new Zujian();
-            convertView=layoutInflater.inflate(R.layout.list__news, null);
+            convertView=layoutInflater.inflate(R.layout.list_news, null);
             //zujian.icons= (TextView) convertView.findViewById(R.id.icons);
             zujian.title=(TextView)convertView.findViewById(R.id.tv_title);
             zujian.source=(TextView)convertView.findViewById(R.id.tv_source);

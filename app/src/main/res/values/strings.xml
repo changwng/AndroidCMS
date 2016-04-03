@@ -12,4 +12,8 @@
     <string name="icon_cycle">&#xe901;</string>
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
+    <string name="action_settings">设置</string>
+    <string name="setting_update"><font color='black'>检查更新</font></string>
+    <string name="setting_clear"><font color='black'>清除缓存</font></string>
+    <string name="setting_suggest"><font color='black'>意见反馈</font></string>
 </resources>

@@ -3,15 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/colorBuleSmallx"
-        android:paddingTop="15dip"
-        android:paddingLeft="5dip"
-        android:background="@color/colorBuleBig"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
