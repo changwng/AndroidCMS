@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.cms.satan.androidcms.R;
 import com.cms.satan.androidcms.ui.NewInfoActivity;
+import com.cms.satan.androidcms.utils.NetSources;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -61,14 +62,14 @@ public class SuperAwesomeCardFragment extends Fragment {
             @Override
             public void onNewsInfo(ArrayList<String> title, final ArrayList<String> source, final ArrayList<String> url) {
                 pb.setVisibility(View.INVISIBLE);
-                MyNewsAdapter adapter = new MyNewsAdapter(getContext(), null, title, source);
+                MyNewsAdapter adapter = new MyNewsAdapter(getActivity().getApplicationContext(), null, title, source);
                 _lv.setAdapter(adapter);
                 _lv.setOnItemClickListener(
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Log.d("Super","_lv_itemclicked");
-                                Intent intent = new Intent(getContext(),NewInfoActivity.class);
+                                Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
                                 intent.putExtra("url", url.get(position));
                                 intent.putExtra("source", source.get(position));
                                 startActivity(intent);
@@ -79,10 +80,6 @@ public class SuperAwesomeCardFragment extends Fragment {
         });
         return rootView;
     }
-    private String[] Urls={
-            "http://api.1-blog.com/biz/bizserver/news/list.do"
-    };
-
     public interface NewsCallBack {
         public void onNewsInfo(ArrayList<String> title,ArrayList<String> source,ArrayList<String> url);
     }
@@ -92,9 +89,9 @@ public class SuperAwesomeCardFragment extends Fragment {
         switch (type)
         {
             case 0:
-                _url=Urls[type];
+                _url= NetSources.Urls[0];
                 default:
-                    _url=Urls[0];
+                    _url=NetSources.Urls[0];
         }
         // 创建客户端对象
         AsyncHttpClient client = new AsyncHttpClient();

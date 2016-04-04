@@ -14,7 +14,7 @@
             android:layout_width="220sp"
             android:maxLines="2"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="求职者向着梦想前进的道路发现不一样的风景，改变人生的轨迹"
             android:textColor="@color/colorBlack"
             android:layout_marginTop="5sp"
@@ -25,11 +25,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:maxLength="8"
             android:text="来源:腾讯新闻"
             android:textColor="@color/colorBlack"
-            android:layout_marginBottom="5sp"
+            android:layout_marginTop="15sp"
             android:layout_below="@id/tv_title"
             android:id="@+id/tv_source"
             />
