@@ -47,7 +47,8 @@ public class SuperAwesomeCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
         position=getArguments().getInt(ARG_POSITION);
     }
-
+    public  ListView _lv;
+    public ProgressBar pb;
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -55,8 +56,8 @@ public class SuperAwesomeCardFragment extends Fragment {
         //FrameLayout _layout= (FrameLayout) rootView.findViewById(R.id.child_container);
 //        //ViewCompat.setElevation(rootView, 50);
 //        View childView= inflater.inflate(R.layout.home_layout,container,false);
-        final ListView _lv= (ListView) rootView.findViewById(R.id.lv_news);
-        final ProgressBar pb= (ProgressBar) rootView.findViewById(R.id.pb_loading);
+        _lv= (ListView) rootView.findViewById(R.id.lv_news);
+        pb= (ProgressBar) rootView.findViewById(R.id.pb_loading);
         pb.setVisibility(View.VISIBLE);
         GetHttpNews(0, 10, 1, new NewsCallBack() {
             @Override
@@ -79,6 +80,31 @@ public class SuperAwesomeCardFragment extends Fragment {
             }
         });
         return rootView;
+    }
+    public void updateData()
+    {
+        pb.setVisibility(View.VISIBLE);
+        GetHttpNews(0, 10, 1, new NewsCallBack() {
+            @Override
+            public void onNewsInfo(ArrayList<String> title, final ArrayList<String> source, final ArrayList<String> url) {
+                pb.setVisibility(View.INVISIBLE);
+                MyNewsAdapter adapter = new MyNewsAdapter(getActivity().getApplicationContext(), null, title, source);
+                _lv.setAdapter(adapter);
+                _lv.deferNotifyDataSetChanged();
+                _lv.setOnItemClickListener(
+                        new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("Super","_lv_itemclicked");
+                                Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
+                                intent.putExtra("url", url.get(position));
+                                intent.putExtra("source", source.get(position));
+                                startActivity(intent);
+                            }
+                        }
+                );
+            }
+        });
     }
     public interface NewsCallBack {
         public void onNewsInfo(ArrayList<String> title,ArrayList<String> source,ArrayList<String> url);

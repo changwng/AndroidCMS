@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/libraryMenu/libraryMenu.iml" filepath="$PROJECT_DIR$/libraryMenu/libraryMenu.iml" />
       <module fileurl="file://$PROJECT_DIR$/librarySlide/librarySlide.iml" filepath="$PROJECT_DIR$/librarySlide/librarySlide.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraryTint/libraryTint.iml" filepath="$PROJECT_DIR$/libraryTint/libraryTint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ptr-lib/ptr-lib.iml" filepath="$PROJECT_DIR$/ptr-lib/ptr-lib.iml" />
     </modules>
   </component>
 </project>

@@ -21,7 +21,9 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.balysv.materialmenu.MaterialMenuDrawable;
@@ -35,13 +37,15 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 
-public class startActivity extends BaseActivity implements AdapterView.OnItemClickListener{
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+
+public class startActivity extends BaseActivity  implements View.OnClickListener,AdapterView.OnItemClickListener {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ListView mNewsList;
-    private ArrayList<String> arrText;
-    private ArrayList<Integer> arrIcons;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mTitle;
     private RelativeLayout rl_leftContainer;
@@ -51,17 +55,21 @@ public class startActivity extends BaseActivity implements AdapterView.OnItemCli
     private TextView home2;
     private TextView pacman2;
     private TextView user2;
-    private PagerSlidingTabStrip tabs;
-    private ViewPager pager;
+    private ArrayList<String> arrText;
+    private ArrayList<Integer> arrIcons;
     private Toolbar bar;
     private MaterialMenuDrawable materialMenu;
+    private FragmentHome fragmentHome;
+    private FragmentCircle fragmentCircle;
+    private FragmentUser fragmentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //设置工具栏
         bar= (Toolbar) findViewById(R.id.toolbar);
-        bar.setTitle("点滴移动");
+        bar.setTitle("创联资讯");
         setSupportActionBar(bar);
         bar.setNavigationOnClickListener(
                 new View.OnClickListener() {
@@ -85,28 +93,7 @@ public class startActivity extends BaseActivity implements AdapterView.OnItemCli
         mTitle = (String) getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.lv_drawer);
-        mNewsList= (ListView) findViewById(R.id.lv_news);
         rl_leftContainer= (RelativeLayout) findViewById(R.id.rl_leftContainer);
-
-        //可滑动卡式控件创建
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-       // tabs.setBackgroundResource(R.color.colorWhite);
-        tabs.setIndicatorColorResource(R.color.colorPrimary);
-        tabs.setTabBackground(R.color.colorBuleBig);
-        tabs.setTextColor(R.color.colorBlack);
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        tabs.setViewPager(pager);
-        final int pageMargin=(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        pager.setPageMargin(pageMargin);
-        pager.setCurrentItem(1);
-        tabs.setOnTabReselectedListener((new PagerSlidingTabStrip.OnTabReselectedListener() {
-            @Override
-            public void onTabReselected(int position) {
-                pager.setCurrentItem(position);
-            }
-        }));
-
         //设置抽屉效果
         initDrawer();
         //初始化字体
@@ -128,6 +115,16 @@ public class startActivity extends BaseActivity implements AdapterView.OnItemCli
                 startActivity(intent);
             }
         });
+
+        //底部按钮点击
+        TableRow tr_home= (TableRow) findViewById(R.id.home_click);
+        TableRow tr_cycle= (TableRow) findViewById(R.id.cycle_click);
+        TableRow tr_user= (TableRow) findViewById(R.id.user_click);
+        tr_home.setOnClickListener(this);
+        tr_cycle.setOnClickListener(this);
+        tr_user.setOnClickListener(this);
+        //首页
+        init_home();
     }
 
     public void initDrawer()
@@ -169,29 +166,16 @@ public class startActivity extends BaseActivity implements AdapterView.OnItemCli
         mDrawerList.setOnItemClickListener(this);
     }
 
-    public void home_click(View view)
-    {
-        setNavColor(1);
-        View v=getLayoutInflater().inflate(R.layout.home_layout, null);
-    }
-    public void pacman_click(View view)
-    {
-        setNavColor(2);
-    }
-    public void user_click(View view)
-    {
-        setNavColor(3);
-        View v=getLayoutInflater().inflate(R.layout.user_layout, null);
-    }
     public void initFont()
     {
         Typeface iconfont = Typeface.createFromAsset(getAssets(), "iconify/icomoon.ttf");
+        Typeface iconfont1= Typeface.createFromAsset(getAssets(), "iconify/icomoon1.ttf");
         TextView home = (TextView)findViewById(R.id.tv_home);
         TextView pacman = (TextView)findViewById(R.id.tv_pacman);
         TextView user = (TextView)findViewById(R.id.tv_user);
-        home.setTypeface(iconfont);
-        pacman.setTypeface(iconfont);
-        user.setTypeface(iconfont);
+        home.setTypeface(iconfont1);
+        pacman.setTypeface(iconfont1);
+        user.setTypeface(iconfont1);
 
     }
     public void setNavColor(int i)
@@ -274,5 +258,65 @@ public class startActivity extends BaseActivity implements AdapterView.OnItemCli
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        android.app.FragmentManager fm = getFragmentManager();
+        // 开启Fragment事务
+        android.app.FragmentTransaction transaction = fm.beginTransaction();
+        switch (v.getId())
+        {
+            case R.id.home_click:
+                init_home();
+                setNavColor(1);
+                break;
+            case R.id.cycle_click:
+               init_circle();
+                setNavColor(2);
+                break;
+            case R.id.user_click:
+                init_user();
+                setNavColor(3);
+                break;
+        }
+
+    }
+    public void init_home()
+    {
+        android.app.FragmentManager fm = getFragmentManager();
+        // 开启Fragment事务
+        android.app.FragmentTransaction transaction = fm.beginTransaction();
+//        if (fragmentHome==null)
+//        {
+            FragmentHome.fm=getSupportFragmentManager();
+            fragmentHome=new FragmentHome();
+//        }
+        transaction.replace(R.id.fl_content,fragmentHome);
+        transaction.commit();
+    }
+    public void init_circle()
+    {
+        android.app.FragmentManager fm = getFragmentManager();
+        // 开启Fragment事务
+        android.app.FragmentTransaction transaction = fm.beginTransaction();
+        if (fragmentCircle==null)
+        {
+            fragmentCircle=new FragmentCircle();
+        }
+        transaction.replace(R.id.fl_content,fragmentCircle);
+        transaction.commit();
+    }
+    public void init_user()
+    {
+        android.app.FragmentManager fm = getFragmentManager();
+        // 开启Fragment事务
+        android.app.FragmentTransaction transaction = fm.beginTransaction();
+        if (fragmentUser==null)
+        {
+             fragmentUser=new FragmentUser();
+        }
+        transaction.replace(R.id.fl_content,fragmentUser);
+        transaction.commit();
     }
 }

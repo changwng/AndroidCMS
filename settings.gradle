@@ -1,1 +1,1 @@
-include ':app', ':libraryTint', ':librarySlide', ':libraryMenu'
+include ':app', ':libraryTint', ':librarySlide', ':libraryMenu', ':ptr-lib'

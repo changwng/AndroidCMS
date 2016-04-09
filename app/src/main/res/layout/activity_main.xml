@@ -6,8 +6,8 @@
     android:background="@android:color/white">
 
     <!-- The Content view -->
-   <include android:id="@+id/main_content" layout="@layout/main_content"/>
+   <include android:id="@+id/left_drawer" layout="@layout/main_content"/>
 
     <!-- The navigation view -->
-    <include android:id="@+id/left_drawer" layout="@layout/left_drawer"/>
+    <include android:id="@+id/main_content" layout="@layout/left_drawer"/>
 </android.support.v4.widget.DrawerLayout>

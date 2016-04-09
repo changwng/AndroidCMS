@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:orientation="vertical"
-    >
+>
 <include layout="@layout/common_toolbar"/>
-<com.astuetz.PagerSlidingTabStrip
-    android:id="@+id/tabs"
-    android:layout_width="match_parent"
-    android:layout_height="48dip"
-    android:background="@drawable/background_tabs"
-    />
-
-<android.support.v4.view.ViewPager
-    android:id="@+id/pager"
-    android:layout_width="match_parent"
-    android:layout_height="0sp"
-    android:layout_weight="1"
-    />
-<View
-    android:layout_width="fill_parent"
-    android:layout_height="1dip"
-    android:background="@color/colorSplit"
-    android:layout_above="@+id/tb_bottom"
-    android:layout_marginBottom="10dip"
-    />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/vw"
+        android:id="@+id/fl_content"></FrameLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorSplit"
+        android:layout_above="@+id/tb_bottom"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/vw"
+        />
 <TableLayout
     android:id="@+id/tb_bottom"
     android:layout_width="match_parent"
@@ -37,7 +30,7 @@ android:orientation="vertical"
         android:layout_height="fill_parent">
         <TableRow
             android:layout_height="40dip"
-            android:onClick="home_click">
+            android:id="@+id/home_click">
             <RelativeLayout
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
@@ -45,7 +38,7 @@ android:orientation="vertical"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icons_home"
+                    android:text="@string/icon_user2"
                     android:textColor="@color/colorIconsFocus"
                     android:id="@+id/tv_home"
                     android:layout_centerHorizontal="true"
@@ -56,6 +49,7 @@ android:orientation="vertical"
                     android:textColor="@color/colorIconsFocus2"
                     android:textSize="11dip"
                     android:text="首页"
+                    android:paddingTop="3dip"
                     android:layout_below="@id/tv_home"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/tv_home2"/>
@@ -63,7 +57,7 @@ android:orientation="vertical"
 
         </TableRow>
         <TableRow android:layout_height="40dip"
-            android:onClick="pacman_click">
+            android:id="@+id/cycle_click">
             <RelativeLayout
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
@@ -71,11 +65,11 @@ android:orientation="vertical"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icons_pacman"
+                    android:text="@string/icon_cycle"
                     android:textColor="@color/colorIconsBlur"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/tv_pacman"
-                    android:textSize="20dip"/>
+                    android:textSize="23dip"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,7 +82,7 @@ android:orientation="vertical"
             </RelativeLayout>
         </TableRow>
         <TableRow android:layout_height="40dip"
-            android:onClick="user_click">
+            android:id="@+id/user_click">
             <RelativeLayout
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
@@ -96,17 +90,17 @@ android:orientation="vertical"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icons_user"
+                    android:text="@string/icon_twitter"
                     android:textColor="@color/colorIconsBlur"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/tv_user"
-                    android:textSize="20dip"/>
+                    android:textSize="23dip"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorIconsBlur2"
                     android:textSize="11dip"
-                    android:text="我"
+                    android:text="下载"
                     android:layout_below="@id/tv_user"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/tv_user2"/>
@@ -114,4 +108,4 @@ android:orientation="vertical"
         </TableRow>
     </TableRow>
 </TableLayout>
-</LinearLayout>
+</RelativeLayout>

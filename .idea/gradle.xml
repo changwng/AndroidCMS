@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/libraryMenu" />
             <option value="$PROJECT_DIR$/librarySlide" />
             <option value="$PROJECT_DIR$/libraryTint" />
+            <option value="$PROJECT_DIR$/ptr-lib" />
           </set>
         </option>
       </GradleProjectSettings>
