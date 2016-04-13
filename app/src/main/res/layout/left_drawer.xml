@@ -1,52 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="275dp"
 android:layout_height="fill_parent"
 android:layout_gravity="start"
 android:orientation="vertical"
-android:id="@+id/rl_leftContainer">
-<ImageView
-    android:id="@+id/iv_header"
-    android:layout_width="fill_parent"
-    android:layout_height="190sp"
-    android:src="@drawable/background_drawer_header"
-    android:scaleType="fitXY"
-    />
+android:id="@+id/rl_leftContainer"
+    android:background="@color/colorWhite">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="190dip"
+        android:id="@+id/rl_loginlayout"
+        android:background="@color/colorRed"
+        >
+        <com.cms.satan.androidcms.widget.RoundImageView
+         android:id="@+id/w_user_logo"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/comment_default_photo"
+        app:border_width="2dp"
+        app:border_color="@color/colorWhite"
+        android:layout_marginTop="25dip">
+
+    </com.cms.satan.androidcms.widget.RoundImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorWhite"
+            android:text="立即登录"
+            android:layout_below="@+id/w_user_logo"
+            android:paddingTop="10dip"
+            android:textSize="18sp"
+            />
+    </RelativeLayout>
     <ListView
         android:id="@+id/lv_drawer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/iv_header"
+        android:layout_below="@+id/rl_loginlayout"
         android:layout_above="@+id/rl_bottom"
         android:background="#ffffff"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
+        android:layout_marginTop="10dip"
         >
     </ListView>
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="50sp"
+        android:layout_height="40sp"
         android:id="@+id/rl_bottom"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorBuleBig">
+        android:background="@color/colorRed">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
             android:id="@+id/iv_setting"
-            android:src="@android:drawable/ic_lock_idle_lock"
+            android:src="@drawable/setting"
             android:layout_marginLeft="25sp"
-            android:layout_marginTop="14sp"/>
+            android:layout_marginTop="8sp"
+           />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorWhite"
             android:layout_toRightOf="@+id/iv_setting"
             android:text="设置"
             android:textSize="16sp"
             android:id="@+id/title"
             android:layout_marginLeft="35sp"
-            android:layout_marginTop="16sp"/>
+            android:layout_marginTop="10sp"/>
     </RelativeLayout>
 
 </RelativeLayout>

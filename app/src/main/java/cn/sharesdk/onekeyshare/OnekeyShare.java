@@ -615,9 +615,9 @@ public class OnekeyShare implements PlatformActionListener, Callback {
 			builder.setContentText(text);
 			PendingIntent pi = PendingIntent.getActivity(app, 0, new Intent(), 0);
 			builder.setContentIntent(pi);
-			builder.setSmallIcon(R.drawable.office);
+			builder.setSmallIcon(R.drawable.logo);
 			Notification notification = builder.getNotification();
-			manager.notify(R.drawable.office, notification);
+			manager.notify(R.drawable.logo, notification);
 
 
 

@@ -38,7 +38,7 @@
     <ImageView
         android:layout_width="140sp"
         android:layout_height="70dip"
-        android:src="@drawable/login"
+        android:src="@drawable/no_pic"
         android:layout_marginTop="5sp"
         android:layout_marginBottom="5sp"
         android:layout_marginLeft="2sp"

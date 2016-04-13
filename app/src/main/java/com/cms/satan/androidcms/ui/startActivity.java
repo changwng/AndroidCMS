@@ -1,5 +1,6 @@
 package com.cms.satan.androidcms.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -31,8 +32,13 @@ import com.balysv.materialmenu.MaterialMenuIcon;
 import com.cms.satan.androidcms.R;
 import com.cms.satan.androidcms.common.MyAdapter;
 import com.cms.satan.androidcms.common.MyPagerAdapter;
+import com.cms.satan.androidcms.widget.RoundImageView;
 import com.litesuits.http.utils.HttpUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
+import com.tencent.android.tpush.service.XGPushService;
 
 
 import java.util.ArrayList;
@@ -49,12 +55,12 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
     private ActionBarDrawerToggle mDrawerToggle;
     private String mTitle;
     private RelativeLayout rl_leftContainer;
-    private TextView home;
-    private TextView pacman ;
-    private TextView user ;
-    private TextView home2;
-    private TextView pacman2;
-    private TextView user2;
+    private TextView home_image;
+    private TextView home_text ;
+    private TextView video_image ;
+    private TextView video_text;
+    private TextView collection_image;
+    private TextView collection_text;
     private ArrayList<String> arrText;
     private ArrayList<Integer> arrIcons;
     private Toolbar bar;
@@ -67,9 +73,39 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 开启logcat输出，方便debug，发布时请关闭
+        XGPushConfig.enableDebug(this, true);
+        // 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(), XGIOperateCallback)带callback版本
+        // 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
+        // 具体可参考详细的开发指南
+        // 传递的参数为ApplicationContext
+        Context context = getApplicationContext();
+        XGPushManager.registerPush(context,new XGIOperateCallback()
+        {
+            @Override
+            public void onSuccess(Object o, int i) {
+                Log.d("TPUSH",o.toString());
+            }
+
+            @Override
+            public void onFail(Object o, int i, String s) {
+                Log.d("TPUSH",i+s);
+            }
+        });
+
+// 2.36（不包括）之前的版本需要调用以下2行代码
+//        Intent service = new Intent(context, XGPushService.class);
+//        context.startService(service);
+
+
+// 其它常用的API：
+// 绑定账号（别名）注册：registerPush(context,account)或registerPush(context,account, XGIOperateCallback)，其中account为APP账号，可以为任意字符串（qq、openid或任意第三方），业务方一定要注意终端与后台保持一致。
+// 取消绑定账号（别名）：registerPush(context,"*")，即account="*"为取消绑定，解绑后，该针对该账号的推送将失效
+// 反注册（不再接收消息）：unregisterPush(context)
+// 设置标签：setTag(context, tagName)
+// 删除标签：deleteTag(context, tagName)
         //设置工具栏
         bar= (Toolbar) findViewById(R.id.toolbar);
-        bar.setTitle("创联资讯");
         setSupportActionBar(bar);
         bar.setNavigationOnClickListener(
                 new View.OnClickListener() {
@@ -94,18 +130,25 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.lv_drawer);
         rl_leftContainer= (RelativeLayout) findViewById(R.id.rl_leftContainer);
+        RoundImageView user_logo= (RoundImageView) findViewById(R.id.w_user_logo);
+        user_logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "功能正在开发中!", Toast.LENGTH_LONG);
+            }
+        });
         //设置抽屉效果
         initDrawer();
+
+
+        home_image = (TextView)findViewById(R.id.tv_home_image);
+        home_text = (TextView)findViewById(R.id.tv_home_text);
+        video_image = (TextView)findViewById(R.id.tv_video_image);
+        video_text = (TextView)findViewById(R.id.tv_video_text);
+        collection_image = (TextView)findViewById(R.id.tv_collection_image);
+        collection_text = (TextView)findViewById(R.id.tv_collection_text);
         //初始化字体
         initFont();
-
-        home = (TextView)findViewById(R.id.tv_home);
-        pacman = (TextView)findViewById(R.id.tv_pacman);
-        user = (TextView)findViewById(R.id.tv_user);
-        home2 = (TextView)findViewById(R.id.tv_home2);
-        pacman2 = (TextView)findViewById(R.id.tv_pacman2);
-        user2 = (TextView)findViewById(R.id.tv_user2);
-
         //侧滑设置
         RelativeLayout _rlsetting= (RelativeLayout) findViewById(R.id.rl_bottom);
         _rlsetting.setOnClickListener(new View.OnClickListener(){
@@ -130,9 +173,9 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
     public void initDrawer()
     {
         arrIcons=new ArrayList<Integer>();
-        arrIcons.add(R.string.icon_user2);
-        arrIcons.add(R.string.icon_twitter);
-        arrIcons.add(R.string.icon_cycle);
+        arrIcons.add(R.string.icons_home_normal);
+        arrIcons.add(R.string.icons_video_mormal);
+        arrIcons.add(R.string.icons_collection_normal);
         arrText=new ArrayList<String>();
         arrText.add("用户资料");
         arrText.add("分享应用");
@@ -169,15 +212,17 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
     public void initFont()
     {
         Typeface iconfont = Typeface.createFromAsset(getAssets(), "iconify/icomoon.ttf");
-        Typeface iconfont1= Typeface.createFromAsset(getAssets(), "iconify/icomoon1.ttf");
-        TextView home = (TextView)findViewById(R.id.tv_home);
-        TextView pacman = (TextView)findViewById(R.id.tv_pacman);
-        TextView user = (TextView)findViewById(R.id.tv_user);
-        home.setTypeface(iconfont1);
-        pacman.setTypeface(iconfont1);
-        user.setTypeface(iconfont1);
+        home_image.setTypeface(iconfont);
+        video_image.setTypeface(iconfont);
+        collection_image.setTypeface(iconfont);
 
     }
+    public void setTextProperty(TextView tv,int color,int text)
+    {
+        tv.setTextColor(this.getResources().getColor(color));
+        tv.setText(text);
+    }
+
     public void setNavColor(int i)
     {
         try
@@ -185,28 +230,28 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
             switch (i)
             {
                 case 1:
-                    home.setTextColor(this.getResources().getColor(R.color.colorIconsFocus));
-                    home2.setTextColor(this.getResources().getColor(R.color.colorIconsFocus2));
-                    pacman.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    pacman2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
-                    user.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    user2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
+                    setTextProperty(home_image,R.color.colorIcons_Image_focus,R.string.icons_home_focus);
+                    setTextProperty(home_text,R.color.colorIcons_text_focus,R.string.text_home);
+                    setTextProperty(video_image,R.color.colorIcons_Image_normal,R.string.icons_video_mormal);
+                    setTextProperty(video_text,R.color.colorIcons_text_normal,R.string.text_video);
+                    setTextProperty(collection_image,R.color.colorIcons_Image_normal,R.string.icons_collection_normal);
+                    setTextProperty(collection_text,R.color.colorIcons_text_normal,R.string.text_collection);
                     break;
                 case 2:
-                    home.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    home2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
-                    pacman.setTextColor(this.getResources().getColor(R.color.colorIconsFocus));
-                    pacman2.setTextColor(this.getResources().getColor(R.color.colorIconsFocus2));
-                    user.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    user2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
+                    setTextProperty(home_image, R.color.colorIcons_Image_normal, R.string.icons_home_normal);
+                    setTextProperty(home_text, R.color.colorIcons_text_normal, R.string.text_home);
+                    setTextProperty(video_image, R.color.colorIcons_Image_focus, R.string.icons_video_focus);
+                    setTextProperty(video_text, R.color.colorIcons_text_focus, R.string.text_video);
+                    setTextProperty(collection_image, R.color.colorIcons_Image_normal, R.string.icons_collection_normal);
+                    setTextProperty(collection_text, R.color.colorIcons_text_normal, R.string.text_collection);
                     break;
                 case 3:
-                    home.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    home2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
-                    pacman.setTextColor(this.getResources().getColor(R.color.colorIconsBlur));
-                    pacman2.setTextColor(this.getResources().getColor(R.color.colorIconsBlur2));
-                    user.setTextColor(this.getResources().getColor(R.color.colorIconsFocus));
-                    user2.setTextColor(this.getResources().getColor(R.color.colorIconsFocus2));
+                    setTextProperty(home_image, R.color.colorIcons_Image_normal, R.string.icons_home_normal);
+                    setTextProperty(home_text, R.color.colorIcons_text_normal, R.string.text_home);
+                    setTextProperty(video_image, R.color.colorIcons_Image_normal, R.string.icons_video_mormal);
+                    setTextProperty(video_text, R.color.colorIcons_text_normal, R.string.text_video);
+                    setTextProperty(collection_image, R.color.colorIcons_Image_focus, R.string.icons_collection_focus);
+                    setTextProperty(collection_text, R.color.colorIcons_text_focus, R.string.text_collection);
                     break;
             }
         }
@@ -237,7 +282,7 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
     //工具栏的点击事件
@@ -246,17 +291,17 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent =new Intent(startActivity.this,FragmentPreferences.class);
-            startActivity(intent);
-            return true;
-        }
-        if (id==android.R.id.home) {
-
-        }
+//        if (id == R.id.action_settings) {
+//            Intent intent =new Intent(startActivity.this,FragmentPreferences.class);
+//            startActivity(intent);
+//            return true;
+//        }
+//        if (id==android.R.id.home) {
+//
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -287,11 +332,17 @@ public class startActivity extends BaseActivity  implements View.OnClickListener
         android.app.FragmentManager fm = getFragmentManager();
         // 开启Fragment事务
         android.app.FragmentTransaction transaction = fm.beginTransaction();
-//        if (fragmentHome==null)
-//        {
+        if (fragmentHome==null)
+        {
             FragmentHome.fm=getSupportFragmentManager();
             fragmentHome=new FragmentHome();
-//        }
+        }
+        else
+        {
+            transaction.remove(fragmentHome);
+            FragmentHome.fm=getSupportFragmentManager();
+            fragmentHome=new FragmentHome();
+        }
         transaction.replace(R.id.fl_content,fragmentHome);
         transaction.commit();
     }

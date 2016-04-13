@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -35,6 +36,8 @@ public class SuperAwesomeCardFragment extends Fragment {
     private static final String ARG_POSITION = "position";
     private int position;
     TextView _tv;
+    private String LogTag="SuperAwesomeCardFragment";
+
     public static SuperAwesomeCardFragment newInstance(int position) {
         SuperAwesomeCardFragment fragment = new SuperAwesomeCardFragment();
         Bundle args = new Bundle();
@@ -48,6 +51,7 @@ public class SuperAwesomeCardFragment extends Fragment {
         position=getArguments().getInt(ARG_POSITION);
     }
     public  ListView _lv;
+    public static boolean isScrollTop=false;
     public ProgressBar pb;
     @Nullable
     @Override
@@ -57,6 +61,24 @@ public class SuperAwesomeCardFragment extends Fragment {
 //        //ViewCompat.setElevation(rootView, 50);
 //        View childView= inflater.inflate(R.layout.home_layout,container,false);
         _lv= (ListView) rootView.findViewById(R.id.lv_news);
+        _lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem==0){
+                    isScrollTop=true;
+                 }
+                else
+                {
+                    isScrollTop=false;
+                }
+                if(visibleItemCount+firstVisibleItem==totalItemCount){
+                }
+            }
+        });
         pb= (ProgressBar) rootView.findViewById(R.id.pb_loading);
         pb.setVisibility(View.VISIBLE);
         GetHttpNews(0, 10, 1, new NewsCallBack() {
@@ -69,7 +91,6 @@ public class SuperAwesomeCardFragment extends Fragment {
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("Super","_lv_itemclicked");
                                 Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
                                 intent.putExtra("url", url.get(position));
                                 intent.putExtra("source", source.get(position));
@@ -89,13 +110,12 @@ public class SuperAwesomeCardFragment extends Fragment {
             public void onNewsInfo(ArrayList<String> title, final ArrayList<String> source, final ArrayList<String> url) {
                 pb.setVisibility(View.INVISIBLE);
                 MyNewsAdapter adapter = new MyNewsAdapter(getActivity().getApplicationContext(), null, title, source);
+                adapter.notifyDataSetChanged();
                 _lv.setAdapter(adapter);
-                _lv.deferNotifyDataSetChanged();
                 _lv.setOnItemClickListener(
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.d("Super","_lv_itemclicked");
                                 Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
                                 intent.putExtra("url", url.get(position));
                                 intent.putExtra("source", source.get(position));
@@ -115,9 +135,9 @@ public class SuperAwesomeCardFragment extends Fragment {
         switch (type)
         {
             case 0:
-                _url= NetSources.Urls[0];
+                _url= MyAppConfig.Urls[0];
                 default:
-                    _url=NetSources.Urls[0];
+                    _url=MyAppConfig.Urls[0];
         }
         // 创建客户端对象
         AsyncHttpClient client = new AsyncHttpClient();
@@ -130,7 +150,7 @@ public class SuperAwesomeCardFragment extends Fragment {
             @Override
             public void onFailure(Throwable e, JSONArray errorResponse) {
                 super.onFailure(e, errorResponse);
-                Log.d("startActivity", "errorResponse=====" + errorResponse.toString());
+                Log.d(LogTag, "errorResponse=====" + errorResponse.toString());
             }
 
             @Override
@@ -144,17 +164,17 @@ public class SuperAwesomeCardFragment extends Fragment {
                         JSONArray array = response.getJSONArray("detail");
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
-                            Log.d("startActivity", "标题:" + obj.get("title")
-                                            + "--------来源：" + obj.get("source")
-                                            + "--------url地址：" + obj.get("article_url")
-                                            + "--------发布时间：" + obj.get("publish_time")
-                                            + "--------收录时间：" + obj.get("behot_time")
-                                            + "--------创建时间：" + obj.get("create_time")
-                                            + "--------赞的次数：" + obj.get("digg_count")
-                                            + "--------踩的次数：" + obj.get("bury_count")
-                                            + "--------收藏次数：" + obj.get("repin_count")
-                                            + "--------新闻id：" + obj.get("group_id")
-                            );
+//                            Log.d("startActivity", "标题:" + obj.get("title")
+//                                            + "--------来源：" + obj.get("source")
+//                                            + "--------url地址：" + obj.get("article_url")
+//                                            + "--------发布时间：" + obj.get("publish_time")
+//                                            + "--------收录时间：" + obj.get("behot_time")
+//                                            + "--------创建时间：" + obj.get("create_time")
+//                                            + "--------赞的次数：" + obj.get("digg_count")
+//                                            + "--------踩的次数：" + obj.get("bury_count")
+//                                            + "--------收藏次数：" + obj.get("repin_count")
+//                                            + "--------新闻id：" + obj.get("group_id")
+//                            );
                             titles.add(obj.get("title").toString());
                             sources.add(obj.get("source").toString());
                             urls.add(obj.get("article_url").toString());

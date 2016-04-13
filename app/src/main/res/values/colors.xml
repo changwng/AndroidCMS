@@ -8,11 +8,13 @@
     <color name="colorBuleSmallx">#D2D2D2</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGray">#e07F7F7F</color>
+    <color name="colorLiteGray">#f2f2f2</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorIconsBlur">#5F646B</color>
-    <color name="colorIconsFocus">#119AEE</color>
-    <color name="colorIconsBlur2">#949494</color>
-    <color name="colorIconsFocus2">#48B1F1</color>
+    <color name="colorIcons_Image_normal">#60646b</color>
+    <color name="colorIcons_Image_focus">#ff0000</color>
+    <color name="colorIcons_text_normal">#888888</color>
+    <color name="colorIcons_text_focus">#ff0000</color>
     <color name="colorSplit">#EDEEEE</color>
     <color name="colorUserBg">#98C4F5</color>
+    <color name="colorRed">#f54343</color>
 </resources>

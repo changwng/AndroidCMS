@@ -22,13 +22,16 @@
                 android:id="@+id/logo"
                 android:layout_width="80dip"
                 android:layout_height="80dip"
-                android:src="@drawable/office"
+                android:src="@drawable/logo"
                 android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:padding="5dip"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="点滴移动V1.0.0"
+                android:text="创联资讯V1.0.0"
                 android:id="@+id/title"
                 android:textSize="20dip"
                 android:textColor="@color/colorGray"
@@ -48,7 +51,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="    本应用是android编程练手的简单新闻APP,部分功能未有实现.请谅解.\n\n联系我：\n    qq邮箱1841084366@qq.com"
+        android:text="    本应用是一款新闻软件,分享及时消息.\n\n联系我：\n    qq邮箱1841084366@qq.com"
         android:layout_below="@+id/jieshao"
         android:textColor="#b4b4b4"
         android:textSize="20dip"

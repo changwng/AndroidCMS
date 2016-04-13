@@ -8,19 +8,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="206dip"
-        android:src="@drawable/login"
-        android:id="@+id/imageView"
-        android:fitsSystemWindows="true"
-        android:clipToPadding="true"
-        />
         <com.cms.satan.androidcms.widget.RoundImageView
             android:layout_width="100dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
-            android:src="@drawable/office"
+            android:src="@drawable/logo"
             app:border_width="2dp"
             app:border_color="@color/colorWhite">
 

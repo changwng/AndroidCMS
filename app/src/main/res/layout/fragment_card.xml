@@ -9,7 +9,11 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lv_news" />
+        android:id="@+id/lv_news"
+        android:background="@color/colorWhite"
+        android:divider="@color/colorGray"
+        android:dividerHeight="1px"
+        />
     <ProgressBar
         android:layout_width="100dp"
         android:layout_height="wrap_content"

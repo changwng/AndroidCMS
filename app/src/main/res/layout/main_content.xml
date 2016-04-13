@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 >
-<include layout="@layout/common_toolbar"/>
+<include layout="@layout/diy_toolbar"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,21 +38,21 @@ android:layout_height="wrap_content"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_user2"
-                    android:textColor="@color/colorIconsFocus"
-                    android:id="@+id/tv_home"
+                    android:text="@string/icons_home_focus"
+                    android:textColor="@color/colorIcons_Image_focus"
+                    android:id="@+id/tv_home_image"
                     android:layout_centerHorizontal="true"
-                    android:textSize="20dip"/>
+                    android:textSize="23dip"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorIconsFocus2"
+                    android:textColor="@color/colorIcons_text_focus"
                     android:textSize="11dip"
                     android:text="首页"
                     android:paddingTop="3dip"
-                    android:layout_below="@id/tv_home"
+                    android:layout_below="@id/tv_home_image"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/tv_home2"/>
+                    android:id="@+id/tv_home_text"/>
             </RelativeLayout>
 
         </TableRow>
@@ -65,20 +65,21 @@ android:layout_height="wrap_content"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_cycle"
-                    android:textColor="@color/colorIconsBlur"
+                    android:text="@string/icons_video_mormal"
+                    android:textColor="@color/colorIcons_Image_normal"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/tv_pacman"
+                    android:id="@+id/tv_video_image"
+                    android:layout_marginTop="3dip"
                     android:textSize="23dip"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorIconsBlur2"
+                    android:textColor="@color/colorIcons_text_normal"
                     android:textSize="11dip"
-                    android:text="发现"
-                    android:layout_below="@id/tv_pacman"
+                    android:text="视频"
+                    android:layout_below="@id/tv_video_image"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/tv_pacman2"/>
+                    android:id="@+id/tv_video_text"/>
             </RelativeLayout>
         </TableRow>
         <TableRow android:layout_height="40dip"
@@ -90,20 +91,20 @@ android:layout_height="wrap_content"
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_twitter"
-                    android:textColor="@color/colorIconsBlur"
+                    android:text="@string/icons_collection_normal"
+                    android:textColor="@color/colorIcons_Image_normal"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/tv_user"
-                    android:textSize="23dip"/>
+                    android:id="@+id/tv_collection_image"
+                    android:textSize="26dip"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorIconsBlur2"
+                    android:textColor="@color/colorIcons_text_normal"
                     android:textSize="11dip"
-                    android:text="下载"
-                    android:layout_below="@id/tv_user"
+                    android:text="收藏"
+                    android:layout_below="@id/tv_collection_image"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/tv_user2"/>
+                    android:id="@+id/tv_collection_text"/>
             </RelativeLayout>
         </TableRow>
     </TableRow>

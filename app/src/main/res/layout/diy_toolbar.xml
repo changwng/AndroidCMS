@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorRed"
+    android:minHeight="50sp"
+    android:paddingTop="15sp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/app_name"
+        android:paddingRight="10dp"
+        android:gravity="center"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="27dip"
+        android:background="@drawable/search_edittext_shape"
+        android:singleLine="true"
+        android:drawableStart="@drawable/search_icon"
+        android:hint="请输入关键字"
+        android:drawablePadding="3dp"
+        android:textSize="12dip"
+        android:textColorHint="@color/colorGray"
+        android:layout_marginRight="11dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorGray"
+
+        />
+</android.support.v7.widget.Toolbar>
