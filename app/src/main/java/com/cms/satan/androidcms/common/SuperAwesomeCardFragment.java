@@ -1,6 +1,8 @@
 package com.cms.satan.androidcms.common;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cms.satan.androidcms.R;
+import com.cms.satan.androidcms.bll.NewsBLL;
+import com.cms.satan.androidcms.model.News;
 import com.cms.satan.androidcms.ui.NewInfoActivity;
 import com.cms.satan.androidcms.utils.NetSources;
 import com.loopj.android.http.AsyncHttpClient;
@@ -26,166 +30,160 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
 
 /**
  * Created by l on 2016/4/2.
  */
 public class SuperAwesomeCardFragment extends Fragment {
-    private static final String ARG_POSITION = "position";
-    private int position;
+    private static final String ARG_POSITION = "newsType";
+    private int newsType;
     TextView _tv;
     private String LogTag="SuperAwesomeCardFragment";
+    private int pageSize=10;
 
-    public static SuperAwesomeCardFragment newInstance(int position) {
+    public static SuperAwesomeCardFragment newInstance(int newsType) {
         SuperAwesomeCardFragment fragment = new SuperAwesomeCardFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_POSITION,position);
+        args.putInt(ARG_POSITION,newsType);
         fragment.setArguments(args);
         return fragment;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        position=getArguments().getInt(ARG_POSITION);
+        newsType=getArguments().getInt(ARG_POSITION);
+        currentPage=0;
+        newsBLL=new NewsBLL(getActivity());
     }
     public  ListView _lv;
-    public static boolean isScrollTop=false;
+    public PtrFrameLayout  ptrFrame;
+    private MaterialHeader header;
+    public MyNewsAdapter adapter;
+    public  boolean isScrollTop=false;
     public ProgressBar pb;
+    public boolean isForce;             //是否强制刷新
+    public boolean isNetAvailable;     //是否有网络
+    public int currentPage;             //当前页
+    public boolean isFirstLoad;           //是否第一次加载
+    public List<News> newsItems=new ArrayList<News>();
+    public NewsBLL newsBLL;
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.fragment_card,container,false);
-        //FrameLayout _layout= (FrameLayout) rootView.findViewById(R.id.child_container);
-//        //ViewCompat.setElevation(rootView, 50);
-//        View childView= inflater.inflate(R.layout.home_layout,container,false);
-        _lv= (ListView) rootView.findViewById(R.id.lv_news);
-        _lv.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem==0){
-                    isScrollTop=true;
-                 }
-                else
-                {
-                    isScrollTop=false;
-                }
-                if(visibleItemCount+firstVisibleItem==totalItemCount){
-                }
-            }
-        });
-        pb= (ProgressBar) rootView.findViewById(R.id.pb_loading);
-        pb.setVisibility(View.VISIBLE);
-        GetHttpNews(0, 10, 1, new NewsCallBack() {
-            @Override
-            public void onNewsInfo(ArrayList<String> title, final ArrayList<String> source, final ArrayList<String> url) {
-                pb.setVisibility(View.INVISIBLE);
-                MyNewsAdapter adapter = new MyNewsAdapter(getActivity().getApplicationContext(), null, title, source);
-                _lv.setAdapter(adapter);
-                _lv.setOnItemClickListener(
-                        new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
-                                intent.putExtra("url", url.get(position));
-                                intent.putExtra("source", source.get(position));
-                                startActivity(intent);
-                            }
-                        }
-                );
-            }
-        });
+        init(rootView);
         return rootView;
     }
-    public void updateData()
-    {
-        pb.setVisibility(View.VISIBLE);
-        GetHttpNews(0, 10, 1, new NewsCallBack() {
+
+    private void init(View rootView) {
+        ptrFrame= (PtrFrameLayout) rootView.findViewById(R.id.ptr_frame);
+        Activity parentActivity = getActivity();
+
+        header = new MaterialHeader(parentActivity.getBaseContext());
+
+        header.setPadding(0, 20, 0, 20);
+        header.setPtrFrameLayout(ptrFrame);
+
+
+        ptrFrame.setLoadingMinTime(1000);
+        ptrFrame.setDurationToCloseHeader(300);
+        ptrFrame.setHeaderView(header);
+        ptrFrame.addPtrUIHandler(header);
+
+        ptrFrame.setPtrHandler(new PtrHandler() {
             @Override
-            public void onNewsInfo(ArrayList<String> title, final ArrayList<String> source, final ArrayList<String> url) {
-                pb.setVisibility(View.INVISIBLE);
-                MyNewsAdapter adapter = new MyNewsAdapter(getActivity().getApplicationContext(), null, title, source);
-                adapter.notifyDataSetChanged();
-                _lv.setAdapter(adapter);
-                _lv.setOnItemClickListener(
-                        new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
-                                intent.putExtra("url", url.get(position));
-                                intent.putExtra("source", source.get(position));
-                                startActivity(intent);
-                            }
-                        }
-                );
+            public boolean checkCanDoRefresh(PtrFrameLayout ptrFrameLayout, View view, View view2) {
+                return _lv.getFirstVisiblePosition() == 0;
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout ptrFrameLayout) {
+                GetNewsInfo(adapter, currentPage, true);
             }
         });
-    }
-    public interface NewsCallBack {
-        public void onNewsInfo(ArrayList<String> title,ArrayList<String> source,ArrayList<String> url);
-    }
-    //获取新闻API
-    private void GetHttpNews(int type,int pageSize,int pageIndex, final NewsCallBack callBacks) {
-        String _url="";
-        switch (type)
-        {
-            case 0:
-                _url= MyAppConfig.Urls[0];
-                default:
-                    _url=MyAppConfig.Urls[0];
-        }
-        // 创建客户端对象
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(_url, new JsonHttpResponseHandler() {
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-
-            @Override
-            public void onFailure(Throwable e, JSONArray errorResponse) {
-                super.onFailure(e, errorResponse);
-                Log.d(LogTag, "errorResponse=====" + errorResponse.toString());
-            }
-
-            @Override
-            public void onSuccess(int statusCode, JSONObject response) {
-                super.onSuccess(statusCode, response);
-                if (statusCode == 200) {
-                    ArrayList<String> titles = new ArrayList<String>();
-                    ArrayList<String> sources = new ArrayList<String>();
-                    ArrayList<String> urls = new ArrayList<String>();
-                    try {
-                        JSONArray array = response.getJSONArray("detail");
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject obj = array.getJSONObject(i);
-//                            Log.d("startActivity", "标题:" + obj.get("title")
-//                                            + "--------来源：" + obj.get("source")
-//                                            + "--------url地址：" + obj.get("article_url")
-//                                            + "--------发布时间：" + obj.get("publish_time")
-//                                            + "--------收录时间：" + obj.get("behot_time")
-//                                            + "--------创建时间：" + obj.get("create_time")
-//                                            + "--------赞的次数：" + obj.get("digg_count")
-//                                            + "--------踩的次数：" + obj.get("bury_count")
-//                                            + "--------收藏次数：" + obj.get("repin_count")
-//                                            + "--------新闻id：" + obj.get("group_id")
-//                            );
-                            titles.add(obj.get("title").toString());
-                            sources.add(obj.get("source").toString());
-                            urls.add(obj.get("article_url").toString());
-                        }
-                        callBacks.onNewsInfo(titles, sources,urls);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        _lv= (ListView) rootView.findViewById(R.id.lv_news);
+        adapter = new MyNewsAdapter(getActivity());
+        adapter.addNews(new ArrayList<News>());
+        _lv.setAdapter(adapter);
+        _lv.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(),NewInfoActivity.class);
+                        intent.putExtra("url", newsItems.get(position).getArticle_url());
+                        intent.putExtra("source", newsItems.get(position).getSource());
+                        startActivity(intent);
                     }
                 }
+        );
+        //得到数据
+        GetNewsInfo(adapter, currentPage, false);
+    }
+
+    private void GetNewsInfo( MyNewsAdapter adapter, int currentPage, boolean isForce) {
+        int total = newsItems.size();
+        if (!isForce && total > 0 && newsItems.get(newsItems.size() - 1).getPage_index() >= currentPage) {
+            //不强制刷新时，如果此页已存在则直接从内存中加载
+            adapter.addNews(newsItems);
+            adapter.notifyDataSetChanged();
+            return;
+        }
+        if (isForce && newsItems.size() > 0) {
+            newsItems.clear();
+        }
+        LoadNewsListTask task=new LoadNewsListTask(adapter,newsType,isForce);
+        task.execute(currentPage);
+    }
+    class LoadNewsListTask extends AsyncTask<Integer, Integer,List<News> > {
+        public MyNewsAdapter myNewsAdapter;
+        public int type;
+        public boolean forced;
+        public LoadNewsListTask(MyNewsAdapter mAdapter,int type,boolean forced)
+        {
+            myNewsAdapter=mAdapter;
+            this.type=type;
+            this.forced=forced;
+        }
+        @Override
+        protected List<News> doInBackground(Integer... params) {
+            List<News> _templist=new ArrayList<News>();
+            try {
+                     isNetAvailable=NetSources.IsNetAvailable(getActivity());
+                    if (isNetAvailable&&isFirstLoad)
+                    {
+                        isFirstLoad=false;
+                        return newsBLL.GetNewsCache(type,params[0],true);
+                    }
+                   _templist=newsBLL.GetNewsItems(type,params[0],isNetAvailable);
+                }
+            catch (SQLException e) {
+                e.printStackTrace();
+
             }
-        });
+            finally {
+                return _templist;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<News> newses) {
+            if (forced)
+            {
+                myNewsAdapter.getNewsList().clear();
+            }
+            newsItems.addAll(newses);
+            myNewsAdapter.addNews(newsItems);
+            myNewsAdapter.notifyDataSetChanged();
+            ptrFrame.refreshComplete();
+        }
     }
 }
 
